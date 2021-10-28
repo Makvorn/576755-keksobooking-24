@@ -1,4 +1,4 @@
-import {getRandomArbitrary, getRandomArrayElement, getRandomValueElement, arrayRandomLengthsValues} from './create-random';
+import {getRandomArbitrary, getRandomArrayElement, getRandomValueElement, arrayRandomLengthsValues} from './create-random.js';
 //Переменные
 let authorAvatar = '';
 //данные по объектам из задания
@@ -45,7 +45,7 @@ for (let i = 0; i < 10; i++) {
       guests: getRandomValueElement(object.offer.guests),
       checkin: getRandomArrayElement(object.offer.checkin),
       checkout: getRandomArrayElement(object.offer.checkout),
-      features:  arrayRandomLengthsValues(object.offer.features),
+      features: object.offer.features,
       description: getRandomArrayElement(object.offer.description),
       photos: arrayRandomLengthsValues(object.offer.photos),
     },
