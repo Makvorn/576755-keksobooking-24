@@ -1,4 +1,4 @@
-import {arrayGuests} from './data-object';
+import {arrayGuests} from './data-object.js';
 //темплейт и копируемый блок
 const template = document.querySelector('#card')
   .content
@@ -44,5 +44,5 @@ for (let i = 0; i <= arrayGuests.length - 1; i++) {
   similarListFragment.appendChild(adsElement);
 }
 blockMap.appendChild(similarListFragment);
-export{similarListFragment};
+export{blockMap};
 
