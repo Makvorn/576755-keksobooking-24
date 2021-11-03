@@ -56,7 +56,7 @@ numberRooms.addEventListener('change', (event) => {
   numberRooms.value === optionRoom[0].value ? numberGuests.setAttribute('disabled', 'disabled') : numberGuests.removeAttribute('disabled');
 });
 
-
+//проверка времени заезда и выезда
 timeIn.addEventListener('change', (event) => {
   switch (event.target.value) {
     case '12:00':
@@ -85,7 +85,7 @@ timeOut.addEventListener('change', (event) => {
   }
 });
 
-
+//установка минимальной стоимости жилья
 type.addEventListener('change', (event) => {
   switch (event.target.value) {
     case 'bungalow':
