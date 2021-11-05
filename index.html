@@ -91,7 +91,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" required>
+          <input id="address" name="address" type="text" readonly required>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -232,7 +232,11 @@
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
   </template>
+<link rel="stylesheet" href="leaflet/leaflet.css" crossorigin=""/>
 <script src="js/main.js" type="module"></script>
 <script src="js/utils/form-work.js"></script>
+<script src="leaflet/leaflet.js"  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+<script src="js/utils/map.js" type="module"></script>
 </body>
 </html>
