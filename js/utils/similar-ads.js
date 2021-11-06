@@ -1,3 +1,5 @@
+//не используются
+
 import {arrayGuests} from './data-object.js';
 //темплейт и копируемый блок
 const template = document.querySelector('#card')
@@ -5,10 +7,11 @@ const template = document.querySelector('#card')
   .querySelector('.popup');
 //куда вставлять темплейт
 const blockMap = document.querySelector('.map__canvas');
-
+//создать фрагмент
 const similarListFragment = document.createDocumentFragment();
+//сделал десять фрагментов вставки рандомных значений
 for (let i = 0; i <= arrayGuests.length - 1; i++) {
-
+//соотнощение русских и английских слов
   let typeRus = '';
   switch (arrayGuests[i].offer.type) {
     case 'house': typeRus = 'Дом';
@@ -44,5 +47,4 @@ for (let i = 0; i <= arrayGuests.length - 1; i++) {
   similarListFragment.appendChild(adsElement);
 }
 blockMap.appendChild(similarListFragment);
-export{blockMap};
 

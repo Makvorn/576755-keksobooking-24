@@ -8,7 +8,7 @@ const object = {
   },
 
   offer: {
-    title: ['Первый', 'Второй', 'Третий', 'Четверный', 'Пятый', 'Шестой', 'Седьмой', 'Восьмой', 'Девятый', 'Десятый'],
+    title: ['Первый', 'Второй', 'Третий', 'Четвертый', 'Пятый', 'Шестой', 'Седьмой', 'Восьмой', 'Девятый', 'Десятый'],
     address: ['location.lat','location.lng'],
     price: [1000, 5000],
     type: ['palace', 'flat', 'house', 'bungalow', 'hotel'],
@@ -26,12 +26,12 @@ const object = {
     lng: [139.70000, 139.80000],
   },
 };
-const locationLat = Math.round((getRandomArbitrary(object.location.lat[0], object.location.lat[1]))*100000)/100000;
-const locationLng = Math.round((getRandomArbitrary(object.location.lng[0], object.location.lng[1]))*100000)/100000;
 
 //создание нового объекта и его тиражирование
 const arrayGuests = [];
 for (let i = 0; i < 10; i++) {
+  const locationLat = Math.round((getRandomArbitrary(object.location.lat[0], object.location.lat[1]))*100000)/100000;
+  const locationLng = Math.round((getRandomArbitrary(object.location.lng[0], object.location.lng[1]))*100000)/100000;
   authorAvatar = object.author.avatar[i];
   const guestDetails = {
     author: {avatar: authorAvatar,

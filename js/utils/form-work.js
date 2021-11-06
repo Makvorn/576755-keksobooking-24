@@ -2,14 +2,14 @@ const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 const fieldset = document.querySelector('fieldset');
 const buttonPublisher = document.querySelector('.ad-form__submit');
-const numberRooms = document.getElementById('room_number');
+const numberRooms = document.querySelector('#room_number');
 const optionRoom = numberRooms.querySelectorAll('option');
-const numberGuests = document.getElementById('capacity');
+const numberGuests = document.querySelector('#capacity');
 const optionGuest = numberGuests.querySelectorAll('option');
-const getCount = document.getElementById('price');
-const type = document.getElementById('type');
-const timeIn = document.getElementById('timein');
-const timeOut = document.getElementById('timeout');
+const getCount = document.querySelector('#price');
+const type = document.querySelector('#type');
+const timeIn = document.querySelector('#timein');
+const timeOut = document.querySelector('#timeout');
 
 
 //Блокируем кнопку выбора количества гостей до выбора комнат
