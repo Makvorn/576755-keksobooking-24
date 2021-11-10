@@ -1,6 +1,5 @@
+import {showSuccess, showError} from './allert-message.js';
 const adForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-const fieldset = document.querySelector('fieldset');
 const buttonPublisher = document.querySelector('.ad-form__submit');
 const numberRooms = document.querySelector('#room_number');
 const optionRoom = numberRooms.querySelectorAll('option');
@@ -117,109 +116,44 @@ type.addEventListener('change', (event) => {
       break;
   }
 });
-//Деактивация формы
-const getDisabledForm = () => {
-//добавлям класс ad-form--disabled элементам по заданию
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('ad-form--disabled');
-  //на fieldset по заданию ставим disabled
-  fieldset.setAttribute('disabled', 'disabled');
-};
-getDisabledForm();
-
-//Активация формы
-const getAvailableForm = () => {
-  if (getDisabledForm) {
-    adForm.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('ad-form--disabled');
-    fieldset.setAttribute('disabled', '');
-  }
-};
-getAvailableForm();
 
 //Не даем отправить форму до заполнения необходимых данных
 adForm.addEventListener('change', () => {
   numberRooms.value === 'select-room' || type.value === 'select-type' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
 });
-
+address.textContent === '' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
 // !!!!!!При иморте ломается конструкция свичей сверху
-const ALERT_SHOW_TIME = 5000;
-
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
-
-  alertContainer.textContent = message;
-
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-};
-
-const showSuccessfully = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'blue';
-
-  alertContainer.textContent = message;
-
-  document.body.append(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-};
 
 //Отправка запроса не работает
-const setUserFormSubmit = (onSuccess) => {
-  adForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    showSuccessfully('Форма успешно отправлена');
-    type.value = optionType[0].value;
-    getCount.value ='';
-    timeIn.value = '12:00';
-    timeOut.value = '12:00';
-    numberRooms.value = optionRoom[0].value;
-    numberGuests.value = optionGuest[0].value;
-    titleAds.value = '';
-    address.value = '';
 
-    fetch('https://24.javascript.pages.academy/keksobooking',
-      {
-        method: 'POST',
-        body: new FormData(evt.target),
-      },
-    )
-      .then((response) => {
-        if (response.ok) {
-          onSuccess();
-        } else {
-          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
-        }
-      })
-      .catch(() => {
-        showAlert('Не удалось отправить форму. Попробуйте ещё раз');
-      });
-  });
-};
-setUserFormSubmit();
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  fetch('https://24.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      body: new FormData(evt.target),
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        showSuccess();
+        type.value = optionType[0].value;
+        getCount.value ='';
+        timeIn.value = '12:00';
+        timeOut.value = '12:00';
+        numberRooms.value = optionRoom[0].value;
+        numberGuests.value = optionGuest[0].value;
+        optionGuest.value = 'select-capacity';
+        titleAds.value = '';
+        address.value = '';
+
+      } else {
+        showError();
+      }
+    })
+    .catch(() => {
+      showError();
+    });
+});
 
