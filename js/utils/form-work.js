@@ -1,6 +1,5 @@
+import {showSuccess, showError} from './allert-message.js';
 const adForm = document.querySelector('.ad-form');
-const mapFilters = document.querySelector('.map__filters');
-const fieldset = document.querySelector('fieldset');
 const buttonPublisher = document.querySelector('.ad-form__submit');
 const numberRooms = document.querySelector('#room_number');
 const optionRoom = numberRooms.querySelectorAll('option');
@@ -8,8 +7,11 @@ const numberGuests = document.querySelector('#capacity');
 const optionGuest = numberGuests.querySelectorAll('option');
 const getCount = document.querySelector('#price');
 const type = document.querySelector('#type');
+const optionType = type.querySelectorAll('option');
 const timeIn = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
+const titleAds = document.querySelector('#title');
+const address = document.querySelector('#address');
 
 
 //Блокируем кнопку выбора количества гостей до выбора комнат
@@ -114,27 +116,44 @@ type.addEventListener('change', (event) => {
       break;
   }
 });
-//Деактивация формы
-const getDisabledForm = () => {
-//добавлям класс ad-form--disabled элементам по заданию
-  adForm.classList.add('ad-form--disabled');
-  mapFilters.classList.add('ad-form--disabled');
-  //на fieldset по заданию ставим disabled
-  fieldset.setAttribute('disabled', 'disabled');
-};
-getDisabledForm();
-
-//Активация формы
-const getAvailableForm = () => {
-  if (getDisabledForm) {
-    adForm.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('ad-form--disabled');
-    fieldset.setAttribute('disabled', '');
-  }
-};
-getAvailableForm();
 
 //Не даем отправить форму до заполнения необходимых данных
 adForm.addEventListener('change', () => {
   numberRooms.value === 'select-room' || type.value === 'select-type' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
 });
+address.textContent === '' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
+// !!!!!!При иморте ломается конструкция свичей сверху
+
+//Отправка запроса не работает
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  fetch('https://24.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      body: new FormData(evt.target),
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        showSuccess();
+        type.value = optionType[0].value;
+        getCount.value ='';
+        timeIn.value = '12:00';
+        timeOut.value = '12:00';
+        numberRooms.value = optionRoom[0].value;
+        numberGuests.value = optionGuest[0].value;
+        optionGuest.value = 'select-capacity';
+        titleAds.value = '';
+        address.value = '';
+
+      } else {
+        showError();
+      }
+    })
+    .catch(() => {
+      showError();
+    });
+});
+
