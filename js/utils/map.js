@@ -63,21 +63,50 @@ const getMap = () => {
     .then((response) => response.json())
     .then((data) => {
       getBalun(data);
+
       mapFilters.addEventListener('change', () => {
+        let filterData = data;
         map.closePopup();
-        let price;
-        switch (housingPrice.value) {
-          case 'middle':  10000 <= price < 50000;
-            break;
-          case 'low': price < 10000;
-            break;
-          case 'high': price >= 50000;
-            break;
-        }
         markerGroup.clearLayers();
-        const filterDataFeatures = data.filter(({offer}) => offer.features);
+
+        let featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
+        if (featuresArray.some((feature) => feature.checked)) {
+          filterData = filterData.filter(({offer}) => {
+            let isOk = true;
+            if (offer.features) {
+              for (let i = 0; i < featuresArray.length; i++) {
+                if (featuresArray[i].checked && !offer.features.includes(featuresArray[i].value)) {
+                  isOk = false;
+                  break;
+                }
+              }
+            } else {isOk = false;}
+            return isOk;
+          });
+        }
+
+        if (typeOnMap.value !== 'any') {
+          filterData = filterData.filter(({offer}) => offer.type === typeOnMap.value);
+        }
+        if (roomsOnMap.value !== 'any') {
+          filterData = filterData.filter(({offer}) => offer.rooms === +roomsOnMap.value);
+        }
+        if (guestOnMap.value !== 'any') {
+          filterData = filterData.filter(({offer}) => offer.guests === +guestOnMap.value);
+        }
+        if (housingPrice.value !== 'any') {
+          filterData = filterData.filter(({offer}) => {
+            switch (housingPrice.value) {
+              case 'middle': return offer.price >= 10000 && offer.price <= 50000;
+              case 'low': return offer.price < 10000;
+              case 'high': return offer.price > 50000;
+            }
+          });
+        }
+
+        /* const filterDataFeatures = data.filter(({offer}) => offer.features);
         const filterData = data.filter(({offer}) => offer.type === typeOnMap.value || offer.rooms === +roomsOnMap.value || offer.guests === +guestOnMap.value);
-        console.log(filterData);
+        console.log(filterData);*/
         const getProcessChange = getDebounce( () => getBalun(filterData));
         getProcessChange();
       });
@@ -94,3 +123,4 @@ const getMap = () => {
 //разблочим карту после прогрузки
 };
 export{map, getMap};
+

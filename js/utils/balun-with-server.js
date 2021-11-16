@@ -2,17 +2,24 @@ import {map} from './map.js';
 let markerGroup;
 const getBalun = (dataBalun) => {
   const similarListFragment = document.createDocumentFragment();
-  const copyData = dataBalun.slice(dataBalun);
+  const copyData = dataBalun.slice();
   const dataTens = [];
-  for (let i = 0; i < 10; i++) {
-    const getIndex = Math.floor(Math.random() * copyData.length);
-    const getRemoved = copyData.splice(getIndex, 1);
-    dataTens.push(getRemoved[0]);
+  if (dataBalun.length > 10) {
+    for (let i = 0; i < 10; i++) {
+      const getIndex = Math.floor(Math.random() * copyData.length);
+      const getRemoved = copyData.splice(getIndex, 1);
+      dataTens.push(getRemoved[0]);
+    }
   }
-
+  else {
+    for (let i = 0; i < dataBalun.length; i++) {
+      const getIndex = Math.floor(Math.random() * copyData.length);
+      const getRemoved = copyData.splice(getIndex, 1);
+      dataTens.push(getRemoved[0]);
+    }
+  }
   const points = [];
   for (let i = 0; i <= dataTens.length - 1; i++) {
-
     let typeRus = '';
     switch (dataTens[i].offer.type) {
       case 'house': typeRus = 'Дом';
@@ -26,6 +33,7 @@ const getBalun = (dataBalun) => {
       case 'hotel' : typeRus = 'Отель';
         break;
     }
+
     const template = document.querySelector('#card').content.querySelector('.popup');
     const adsElement = template.cloneNode(true);
     adsElement.querySelector('.popup__feature--dishwasher').style.display = 'none';
