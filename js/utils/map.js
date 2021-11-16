@@ -1,3 +1,4 @@
+//ну епта
 import {showAlert} from './allert-message.js';
 import {getDisabledForm, getAvailableForm} from './on-off-form.js';
 import {getBalun, markerGroup} from './balun-with-server.js';
@@ -51,7 +52,6 @@ const getMap = () => {
   mainPinMarker.on('moveend', (evt) => {
     address.value = `${Math.round((evt.target.getLatLng().lat)*100000)/100000}, ${Math.round((evt.target.getLatLng().lng)*100000)/100000}`;
   });
-
   //получаем данные
   fetch(
     'https://24.javascript.pages.academy/keksobooking/data',
@@ -66,7 +66,6 @@ const getMap = () => {
 
       mapFilters.addEventListener('change', () => {
         let filterData = data;
-        map.closePopup();
         markerGroup.clearLayers();
 
         let featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
@@ -116,11 +115,11 @@ const getMap = () => {
       showAlert('Ошибка загрузки. Попробуйте обновить страницу');
       getDisabledForm();
     });
-
   adFormReset.addEventListener('click', () => {
     map.closePopup();
   });
 //разблочим карту после прогрузки
 };
+
 export{map, getMap};
 

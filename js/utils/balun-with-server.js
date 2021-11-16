@@ -1,4 +1,5 @@
 import {map} from './map.js';
+
 let markerGroup;
 const getBalun = (dataBalun) => {
   const similarListFragment = document.createDocumentFragment();
@@ -33,7 +34,6 @@ const getBalun = (dataBalun) => {
       case 'hotel' : typeRus = 'Отель';
         break;
     }
-
     const template = document.querySelector('#card').content.querySelector('.popup');
     const adsElement = template.cloneNode(true);
     adsElement.querySelector('.popup__feature--dishwasher').style.display = 'none';
