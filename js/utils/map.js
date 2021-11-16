@@ -74,18 +74,6 @@ const getMap = () => {
           case 'high': price >= 50000;
             break;
         }
-        //ну пашок
-        /*        if(!typeOnMap.value === 'any') {
-          arrayData = arrayData.filter(({offer}) => offer.type === typeOnMap.value);
-        }
-        console.log(arrayData);
-        if(!roomsOnMap.value === 'any') {
-          arrayData = arrayData.filter(({offer}) => offer.rooms === +roomsOnMap.value);
-        }
-        if (!guestOnMap.value === 'any') {
-          arrayData = arrayData.filter(({offer}) => offer.guests === +guestOnMap.value);
-        }*/
-        // нужно фьючерсы сортировать  || offer.price === price
         markerGroup.clearLayers();
         const filterDataFeatures = data.filter(({offer}) => offer.features);
         const filterData = data.filter(({offer}) => offer.type === typeOnMap.value || offer.rooms === +roomsOnMap.value || offer.guests === +guestOnMap.value);
