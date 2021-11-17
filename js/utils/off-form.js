@@ -10,15 +10,4 @@ const getDisabledForm = () => {
   fieldset.setAttribute('disabled', 'disabled');
 };
 
-
-//Активация формы
-const getAvailableForm = () => {
-  if (getDisabledForm) {
-    adForm.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('ad-form--disabled');
-    fieldset.setAttribute('disabled', '');
-  }
-};
-
-
-export {getDisabledForm, getAvailableForm};
+export {getDisabledForm};

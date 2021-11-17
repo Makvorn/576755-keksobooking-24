@@ -12,6 +12,8 @@ const timeIn = document.querySelector('#timein');
 const timeOut = document.querySelector('#timeout');
 const titleAds = document.querySelector('#title');
 const address = document.querySelector('#address');
+const checkbox = document.querySelectorAll('.features__checkbox');
+const feildComment = document.querySelector('#description');
 
 const getForm = () => {
 //Блокируем кнопку выбора количества гостей до выбора комнат
@@ -144,8 +146,10 @@ const getForm = () => {
           numberGuests.value = optionGuest[0].value;
           optionGuest.value = 'select-capacity';
           titleAds.value = '';
-          address.value = '';
-
+          address.value = '35.681729, 139.753927';
+          feildComment.value = '';
+          for(let i = 0; i <= checkbox.length - 1; i++) {
+            checkbox[i].checked = false;}
         } else {
           showError();
         }

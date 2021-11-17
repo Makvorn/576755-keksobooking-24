@@ -1,6 +1,6 @@
 //ну епта
 import {showAlert} from './allert-message.js';
-import {getDisabledForm, getAvailableForm} from './on-off-form.js';
+import {getDisabledForm} from './off-form.js';
 import {getBalun, markerGroup} from './balun-with-server.js';
 import {getDebounce} from './debounce.js';
 //создаем фрагмент документа и ищем селектор поля адреса
@@ -63,12 +63,11 @@ const getMap = () => {
     .then((response) => response.json())
     .then((data) => {
       getBalun(data);
-
       mapFilters.addEventListener('change', () => {
         let filterData = data;
         markerGroup.clearLayers();
 
-        let featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
+        const featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
         if (featuresArray.some((feature) => feature.checked)) {
           filterData = filterData.filter(({offer}) => {
             let isOk = true;
@@ -103,13 +102,10 @@ const getMap = () => {
           });
         }
 
-        /* const filterDataFeatures = data.filter(({offer}) => offer.features);
-        const filterData = data.filter(({offer}) => offer.type === typeOnMap.value || offer.rooms === +roomsOnMap.value || offer.guests === +guestOnMap.value);
-        console.log(filterData);*/
         const getProcessChange = getDebounce( () => getBalun(filterData));
         getProcessChange();
       });
-      getAvailableForm();
+
     })
     .catch (() => {
       showAlert('Ошибка загрузки. Попробуйте обновить страницу');
