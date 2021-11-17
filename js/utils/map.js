@@ -117,4 +117,3 @@ const getMap = () => {
 };
 
 export{map, getMap};
-
