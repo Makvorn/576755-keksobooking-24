@@ -1,4 +1,3 @@
-//ну епта
 import {showAlert} from './allert-message.js';
 import {getDisabledForm} from './off-form.js';
 import {getBalun, markerGroup} from './balun-with-server.js';
@@ -118,4 +117,3 @@ const getMap = () => {
 };
 
 export{map, getMap};
-
