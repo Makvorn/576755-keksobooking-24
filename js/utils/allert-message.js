@@ -1,4 +1,4 @@
-const ALERT_SHOW_TIME = 3000;
+const ALERT_SHOW_TIME = 10000;
 
 const showSuccess = () => {
   const showMessage = document.createDocumentFragment();
@@ -56,4 +56,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {showAlert, showSuccess, showError, ALERT_SHOW_TIME};
+export {showAlert, showSuccess, showError};

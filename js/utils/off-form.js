@@ -1,5 +1,3 @@
-//Не используется
-
 //Деактивация формы
 const mapFilters = document.querySelector('.map__filters');
 const fieldset = document.querySelector('fieldset');
@@ -11,15 +9,5 @@ const getDisabledForm = () => {
   //на fieldset по заданию ставим disabled
   fieldset.setAttribute('disabled', 'disabled');
 };
-getDisabledForm();
 
-//Активация формы
-const getAvailableForm = () => {
-  if (getDisabledForm) {
-    adForm.classList.remove('ad-form--disabled');
-    mapFilters.classList.remove('ad-form--disabled');
-    fieldset.setAttribute('disabled', '');
-  }
-};
-getAvailableForm();
-
+export {getDisabledForm};
