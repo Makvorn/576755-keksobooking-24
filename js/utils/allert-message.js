@@ -1,4 +1,6 @@
-const ALERT_SHOW_TIME = 10000;
+const ALERT_SHOW_TIME_TEN = 10000;
+const ALERT_SHOW_TIME_FIVE = 5000;
+const ALERT_SHOW_TIME_THREE = 3000;
 
 const showSuccess = () => {
   const showMessage = document.createDocumentFragment();
@@ -7,7 +9,7 @@ const showSuccess = () => {
   document.body.append(showMessage.appendChild(success));
   setTimeout(() => {
     success.style.display = 'none';
-  }, ALERT_SHOW_TIME);
+  }, ALERT_SHOW_TIME_THREE);
   document.addEventListener('keydown', (evt) => {
     if (evt.keyCode === 27) {
       success.style.display = 'none';
@@ -22,7 +24,7 @@ const showError = () => {
   document.body.append(showMessage.appendChild(error));
   setTimeout(() => {
     error.style.display = 'none';
-  }, ALERT_SHOW_TIME);
+  }, ALERT_SHOW_TIME_FIVE);
   document.addEventListener('keydown', (evt) => {
     if (evt.keyCode === 27) {
       error.style.display = 'none';
@@ -53,7 +55,7 @@ const showAlert = (message) => {
 
   setTimeout(() => {
     alertContainer.remove();
-  }, ALERT_SHOW_TIME);
+  }, ALERT_SHOW_TIME_TEN);
 };
 
 export {showAlert, showSuccess, showError};

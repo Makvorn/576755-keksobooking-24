@@ -2,18 +2,33 @@ import {showAlert} from './allert-message.js';
 import {getDisabledForm} from './off-form.js';
 import {getBalun, markerGroup} from './balun-with-server.js';
 import {getDebounce} from './debounce.js';
+import {getResetInputValue} from './form-work.js';
 //создаем фрагмент документа и ищем селектор поля адреса
 const address = document.querySelector('#address');
-const adFormReset = document.querySelector('.ad-form__reset');
-//НАчал делать для отдельного модуля
 const mapFilters = document.querySelector('.map__filters');
 const typeOnMap = document.querySelector('#housing-type');
 const roomsOnMap = document.querySelector('#housing-rooms');
 const guestOnMap = document.querySelector('#housing-guests');
 const featuresOnMap = document.querySelector('#housing-features');
+const checkbox = featuresOnMap.querySelectorAll('.map__checkbox');
 const housingPrice = document.querySelector('#housing-price');
-//блочим заполнение формы до загрузки карты
+const adFormReset = document.querySelector('.ad-form__reset');
+let resetBalun;
 let map;
+let  mainPinMarker;
+
+const getResetInputFilter = () => {
+  typeOnMap.value = 'any';
+  roomsOnMap.value = 'any';
+  guestOnMap.value = 'any';
+  housingPrice.value = 'any';
+  map.removeLayer(markerGroup);
+  for(let i = 0; i <= checkbox.length - 1; i++) {
+    checkbox[i].checked = false;
+  }
+};
+
+
 const getMap = () => {
 //грузим карту
   map = L.map('map-canvas')
@@ -36,7 +51,7 @@ const getMap = () => {
     iconAnchor: [26, 52],
   });
   //выставляем адрес центральной иконки
-  const mainPinMarker = L.marker(
+  mainPinMarker = L.marker(
     {
       lat: 35.681729, //даем иконке адрес при загрузке страницы
       lng: 139.753927,
@@ -62,44 +77,38 @@ const getMap = () => {
     .then((response) => response.json())
     .then((data) => {
       getBalun(data);
+      resetBalun = data;
+
       mapFilters.addEventListener('change', () => {
         let filterData = data;
         markerGroup.clearLayers();
 
-        const featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
-        if (featuresArray.some((feature) => feature.checked)) {
-          filterData = filterData.filter(({offer}) => {
+        const getOfferFeatures = (features) => {
+          const featuresArray = Array.from(featuresOnMap.querySelectorAll('.map__checkbox'));
+          if (featuresArray.some((feature) => feature.checked)) {
             let isOk = true;
-            if (offer.features) {
+            if (features) {
               for (let i = 0; i < featuresArray.length; i++) {
-                if (featuresArray[i].checked && !offer.features.includes(featuresArray[i].value)) {
+                if (featuresArray[i].checked && !features.includes(featuresArray[i].value)) {
                   isOk = false;
                   break;
                 }
               }
             } else {isOk = false;}
             return isOk;
-          });
-        }
-
-        if (typeOnMap.value !== 'any') {
-          filterData = filterData.filter(({offer}) => offer.type === typeOnMap.value);
-        }
-        if (roomsOnMap.value !== 'any') {
-          filterData = filterData.filter(({offer}) => offer.rooms === +roomsOnMap.value);
-        }
-        if (guestOnMap.value !== 'any') {
-          filterData = filterData.filter(({offer}) => offer.guests === +guestOnMap.value);
-        }
-        if (housingPrice.value !== 'any') {
-          filterData = filterData.filter(({offer}) => {
+          }
+        };
+        const getOfferPrice = (price) => {
+          if (housingPrice.value !== 'any') {
             switch (housingPrice.value) {
-              case 'middle': return offer.price >= 10000 && offer.price <= 50000;
-              case 'low': return offer.price < 10000;
-              case 'high': return offer.price > 50000;
+              case 'middle': return price >= 10000 && price <= 50000;
+              case 'low': return price < 10000;
+              case 'high': return price > 50000;
             }
-          });
-        }
+          }
+        };
+
+        filterData = filterData.filter(({offer}) => (offer.type === typeOnMap.value || typeOnMap.value === 'any') && (offer.rooms === +roomsOnMap.value || roomsOnMap.value === 'any') && (offer.guests === +guestOnMap.value || guestOnMap.value === 'any') && (getOfferPrice(offer.price) || housingPrice.value === 'any') && (getOfferFeatures(offer.features) || getOfferFeatures(offer.features) === undefined));
 
         const getProcessChange = getDebounce( () => getBalun(filterData));
         getProcessChange();
@@ -111,9 +120,9 @@ const getMap = () => {
       getDisabledForm();
     });
   adFormReset.addEventListener('click', () => {
-    map.closePopup();
+    getResetInputValue();
+    getResetInputFilter();
+    getBalun(resetBalun);
   });
-//разблочим карту после прогрузки
 };
-
-export{map, getMap};
+export{map, getMap, mainPinMarker, getResetInputFilter, resetBalun};

@@ -42,6 +42,7 @@ const getBalun = (dataBalun) => {
     adsElement.querySelector('.popup__feature--elevator').style.display = 'none';
     adsElement.querySelector('.popup__feature--conditioner').style.display = 'none';
     adsElement.querySelector('.popup__feature--wifi').style.display = 'none';
+    adsElement.querySelector('.popup__photo').style.display = 'none';
     //фьючерсов может не быть, делаем проверку, иначе оставляем в none. Если не сделать балунов не будет на карте.
     if (dataTens[i].offer.features) {
       for (let j = 0; j <= dataTens[i].offer.features.length - 1; j++) {
@@ -69,6 +70,17 @@ const getBalun = (dataBalun) => {
       }
     }
 
+    const photoTemplate = adsElement.querySelector('.popup__photo');
+    if (dataTens[i].offer.photos) {
+      adsElement.querySelector('.popup__photo').style.display = 'block';
+      adsElement.querySelector('.popup__photo').setAttribute('src', dataTens[i].offer.photos[0]);
+      for (let j = 1; j <= dataTens[i].offer.photos.length - 1; j++) {
+        const photo = photoTemplate.cloneNode(true);
+        photo.setAttribute('src', dataTens[i].offer.photos[j]);
+        adsElement.querySelector('.popup__photos').appendChild(photo);
+      }
+    }
+
     //темплейт и копируемый блок
     adsElement.querySelector('.popup__title').textContent = dataTens[i].offer.title;
     adsElement.querySelector('.popup__text--address').textContent = dataTens[i].offer.address;
@@ -77,9 +89,9 @@ const getBalun = (dataBalun) => {
     adsElement.querySelector('.popup__text--capacity').textContent = `${dataTens[i].offer.rooms} комнаты для ${dataTens[i].offer.guests} гостей`;
     adsElement.querySelector('.popup__text--time').textContent = `Заезд после ${dataTens[i].offer.checkin} выезд до ${dataTens[i].offer.checkout}`;
     adsElement.querySelector('.popup__description').textContent = dataTens[i].offer.description;
-    adsElement.querySelector('.popup__photo').setAttribute('src', dataTens[i].offer.photos);
     adsElement.querySelector('.popup__avatar').setAttribute('src', '');
     adsElement.querySelector('.popup__avatar').setAttribute('src', dataTens[i].author.avatar);
+
 
     const adLabel = { //при каждой проходке цикла даем значение координатам и записываем темплейт в card
       card: similarListFragment.appendChild(adsElement),

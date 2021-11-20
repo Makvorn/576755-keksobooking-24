@@ -1,11 +1,13 @@
-import {showSuccess, showError} from './allert-message.js';
+import {showSuccess, showError, showAlert} from './allert-message.js';
+import {map, mainPinMarker, getResetInputFilter, resetBalun} from './map.js';
+import {getBalun} from './balun-with-server.js';
 const adForm = document.querySelector('.ad-form');
 const buttonPublisher = document.querySelector('.ad-form__submit');
 const numberRooms = document.querySelector('#room_number');
 const optionRoom = numberRooms.querySelectorAll('option');
 const numberGuests = document.querySelector('#capacity');
 const optionGuest = numberGuests.querySelectorAll('option');
-const getCount = document.querySelector('#price');
+const count = document.querySelector('#price');
 const type = document.querySelector('#type');
 const optionType = type.querySelectorAll('option');
 const timeIn = document.querySelector('#timein');
@@ -15,8 +17,38 @@ const address = document.querySelector('#address');
 const checkbox = document.querySelectorAll('.features__checkbox');
 const feildComment = document.querySelector('#description');
 
+const getResetInputValue = () => {
+  type.value = optionType[0].value;
+  count.value = '';
+  timeIn.value = '12:00';
+  timeOut.value = '12:00';
+  numberRooms.value = optionRoom[0].value;
+  numberGuests.value = optionGuest[0].value;
+  optionGuest.value = 'select-capacity';
+  titleAds.value = '';
+  address.value = '35.681729, 139.753927';
+  feildComment.value = '';
+  type.style.border = '1px solid #d9d9d3';
+  count.style.border = '1px solid #d9d9d3';
+  numberRooms.style.border = '1px solid #d9d9d3';
+  titleAds.style.border = '1px solid #d9d9d3';
+  map.closePopup();
+  mainPinMarker.setLatLng([35.681729, 139.753927]).update();
+  for(let i = 0; i <= checkbox.length - 1; i++) {
+    checkbox[i].checked = false;
+  }
+};
+
+const getMessageErrorInput = () => {
+  type.value === optionType[0].value ? type.style.border = '3px solid red' : type.style.border = 'none';
+  count.value < +count.placeholder || count.value > +count.max || count.value === '' ? count.style.border = '3px solid red' : count.style.border = 'none';
+  numberRooms.value === optionRoom[0].value ? numberRooms.style.border = '3px solid red' : numberRooms.style.border = 'none';
+  titleAds.value.length < 30 || titleAds.value.length > 100 ? titleAds.style.border = '3px solid red' : titleAds.style.border = 'none';
+  showAlert('Пожалуйста, заполните необходимые поля');
+};
+
 const getForm = () => {
-//Блокируем кнопку выбора количества гостей до выбора комнат
+  //Блокируем кнопку выбора количества гостей до выбора комнат
   numberGuests.setAttribute('disabled', 'disabled');
   //Количество гостей меняется взависимости от выбора количества компнат;
   numberRooms.addEventListener('change', (evt) => {
@@ -93,42 +125,39 @@ const getForm = () => {
   type.addEventListener('change', (evt) => {
     switch (evt.target.value) {
       case 'bungalow':
-        getCount.min = 0;
-        getCount.placeholder = 0;
-        // здесь и далее удалено согласно ТЗ (не менять значение поля без ведома пользователя) getCount.value = 0;
+        count.min = 0;
+        count.placeholder = 0;
+        // здесь и далее удалено согласно ТЗ (не менять значение поля без ведома пользователя) count.value = 0;
         break;
       case 'flat':
-        getCount.min = 1000;
-        getCount.placeholder = 1000;
+        count.min = 1000;
+        count.placeholder = 1000;
         break;
       case 'hotel':
-        getCount.min = 3000;
-        getCount.placeholder = 3000;
+        count.min = 3000;
+        count.placeholder = 3000;
         break;
       case 'house':
-        getCount.min = 5000;
-        getCount.placeholder = 5000;
+        count.min = 5000;
+        count.placeholder = 5000;
         break;
       case 'palace':
-        getCount.min = 10000;
-        getCount.placeholder = 10000;
+        count.min = 10000;
+        count.placeholder = 10000;
         break;
       case 'select-type':
-        getCount.min = 0;
-        getCount.placeholder = 0;
+        count.min = 0;
+        count.placeholder = 0;
         break;
     }
   });
 
-  //Не даем отправить форму до заполнения необходимых данных
-  adForm.addEventListener('change', () => {
-    numberRooms.value === 'select-room' || type.value === 'select-type' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
+  buttonPublisher.addEventListener('click', () => {
+    getMessageErrorInput();
   });
-  address.textContent === '' ? buttonPublisher.setAttribute('disabled', 'disabled') : buttonPublisher.removeAttribute('disabled');
 
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     fetch('https://24.javascript.pages.academy/keksobooking',
       {
         method: 'POST',
@@ -138,27 +167,21 @@ const getForm = () => {
       .then((response) => {
         if (response.ok) {
           showSuccess();
-          type.value = optionType[0].value;
-          getCount.value ='';
-          timeIn.value = '12:00';
-          timeOut.value = '12:00';
-          numberRooms.value = optionRoom[0].value;
-          numberGuests.value = optionGuest[0].value;
-          optionGuest.value = 'select-capacity';
-          titleAds.value = '';
-          address.value = '35.681729, 139.753927';
-          feildComment.value = '';
-          for(let i = 0; i <= checkbox.length - 1; i++) {
-            checkbox[i].checked = false;}
+          getResetInputValue();
+          getResetInputFilter();
+          getBalun(resetBalun);
         } else {
           showError();
+          getMessageErrorInput();
         }
       })
       .catch(() => {
         showError();
+        getMessageErrorInput;
       });
   });
+
 };
 
-export {getForm};
+export {getForm, getResetInputValue};
 
