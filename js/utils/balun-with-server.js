@@ -1,3 +1,4 @@
+import {MINIMAL_NUMBER_BALUN, ICON_SIZE_BALUN, ICON_ANCHOR_BALUN} from './constants.js';
 import {map} from './map.js';
 
 let markerGroup;
@@ -5,8 +6,8 @@ const getBalun = (dataBalun) => {
   const similarListFragment = document.createDocumentFragment();
   const copyData = dataBalun.slice();
   const dataTens = [];
-  if (dataBalun.length > 10) {
-    for (let i = 0; i < 10; i++) {
+  if (dataBalun.length > MINIMAL_NUMBER_BALUN) {
+    for (let i = 0; i < MINIMAL_NUMBER_BALUN; i++) {
       const getIndex = Math.floor(Math.random() * copyData.length);
       const getRemoved = copyData.splice(getIndex, 1);
       dataTens.push(getRemoved[0]);
@@ -104,8 +105,8 @@ const getBalun = (dataBalun) => {
   points.forEach(({lat, lng, card}) => { //для каждого points[i] делаем:
     const icon = L.icon({ //вид иконок
       iconUrl: 'img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      iconSize: ICON_SIZE_BALUN,
+      iconAnchor: ICON_ANCHOR_BALUN,
     });
 
     const marker = L.marker(//вставляем расположение

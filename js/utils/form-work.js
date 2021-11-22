@@ -1,3 +1,4 @@
+import {MARKER_LAN_LNG, TITLEADS_MIN_LENGTH, TITLEADS_MAX_LENGTH, NUMBER_GUESTS_VALUE, COUNT_MIN_PLACEHOLDER} from './constants.js';
 import {showSuccess, showError, showAlert} from './allert-message.js';
 import {map, mainPinMarker, getResetInputFilter, resetBalun} from './map.js';
 import {getBalun} from './balun-with-server.js';
@@ -26,14 +27,14 @@ const getResetInputValue = () => {
   numberGuests.value = optionGuest[0].value;
   optionGuest.value = 'select-capacity';
   titleAds.value = '';
-  address.value = '35.681729, 139.753927';
+  address.value = `${MARKER_LAN_LNG[0]}, ${MARKER_LAN_LNG[1]}`;
   feildComment.value = '';
   type.style.border = '1px solid #d9d9d3';
   count.style.border = '1px solid #d9d9d3';
   numberRooms.style.border = '1px solid #d9d9d3';
   titleAds.style.border = '1px solid #d9d9d3';
   map.closePopup();
-  mainPinMarker.setLatLng([35.681729, 139.753927]).update();
+  mainPinMarker.setLatLng(MARKER_LAN_LNG).update();
   for(let i = 0; i <= checkbox.length - 1; i++) {
     checkbox[i].checked = false;
   }
@@ -43,7 +44,7 @@ const getMessageErrorInput = () => {
   type.value === optionType[0].value ? type.style.border = '3px solid red' : type.style.border = 'none';
   count.value < +count.placeholder || count.value > +count.max || count.value === '' ? count.style.border = '3px solid red' : count.style.border = 'none';
   numberRooms.value === optionRoom[0].value ? numberRooms.style.border = '3px solid red' : numberRooms.style.border = 'none';
-  titleAds.value.length < 30 || titleAds.value.length > 100 ? titleAds.style.border = '3px solid red' : titleAds.style.border = 'none';
+  titleAds.value.length < TITLEADS_MIN_LENGTH || titleAds.value.length > TITLEADS_MAX_LENGTH ? titleAds.style.border = '3px solid red' : titleAds.style.border = 'none';
   showAlert('Пожалуйста, заполните необходимые поля');
 };
 
@@ -57,14 +58,14 @@ const getForm = () => {
         numberGuests.value = 'select-capacity';
         break;
       case '1':
-        numberGuests.value = 1;
+        numberGuests.value = NUMBER_GUESTS_VALUE[1];
         optionGuest[0].setAttribute('disabled', 'disabled');
         optionGuest[1].setAttribute('disabled', 'disabled');
         optionGuest[2].setAttribute('disabled', 'disabled');
         optionGuest[4].setAttribute('disabled', 'disabled');
         break;
       case '2':
-        numberGuests.value = 2;
+        numberGuests.value = NUMBER_GUESTS_VALUE[2];
         optionGuest[3].removeAttribute('disabled');
         optionGuest[2].removeAttribute('disabled');
         optionGuest[0].setAttribute('disabled', 'disabled');
@@ -72,7 +73,7 @@ const getForm = () => {
         optionGuest[4].setAttribute('disabled', 'disabled');
         break;
       case '3':
-        numberGuests.value = 3;
+        numberGuests.value = NUMBER_GUESTS_VALUE[3];
         optionGuest[1].removeAttribute('disabled');
         optionGuest[2].removeAttribute('disabled');
         optionGuest[3].removeAttribute('disabled');
@@ -80,7 +81,7 @@ const getForm = () => {
         optionGuest[4].setAttribute('disabled', 'disabled');
         break;
       case '100':
-        numberGuests.value = 0;
+        numberGuests.value = NUMBER_GUESTS_VALUE[0];
         optionGuest[4].removeAttribute('disabled');
         optionGuest[0].setAttribute('disabled', 'disabled');
         optionGuest[1].setAttribute('disabled', 'disabled');
@@ -125,29 +126,28 @@ const getForm = () => {
   type.addEventListener('change', (evt) => {
     switch (evt.target.value) {
       case 'bungalow':
-        count.min = 0;
-        count.placeholder = 0;
-        // здесь и далее удалено согласно ТЗ (не менять значение поля без ведома пользователя) count.value = 0;
+        count.min = COUNT_MIN_PLACEHOLDER.bungalow;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.bungalow;
         break;
       case 'flat':
-        count.min = 1000;
-        count.placeholder = 1000;
+        count.min = COUNT_MIN_PLACEHOLDER.flat;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.flat;
         break;
       case 'hotel':
-        count.min = 3000;
-        count.placeholder = 3000;
+        count.min = COUNT_MIN_PLACEHOLDER.hotel;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.hotel;
         break;
       case 'house':
-        count.min = 5000;
-        count.placeholder = 5000;
+        count.min = COUNT_MIN_PLACEHOLDER.house;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.house;
         break;
       case 'palace':
-        count.min = 10000;
-        count.placeholder = 10000;
+        count.min = COUNT_MIN_PLACEHOLDER.palace;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.palace;
         break;
       case 'select-type':
-        count.min = 0;
-        count.placeholder = 0;
+        count.min = COUNT_MIN_PLACEHOLDER.select;
+        count.placeholder = COUNT_MIN_PLACEHOLDER.select;
         break;
     }
   });

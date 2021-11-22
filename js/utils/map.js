@@ -1,8 +1,10 @@
+import {MARKER_LAN_LNG, MAP_SIZE, ICON_SIZE_MARKER, ICON_ANCHOR_MARKER, OFFER_PRICE} from './constants.js';
 import {showAlert} from './allert-message.js';
 import {getDisabledForm} from './off-form.js';
 import {getBalun, markerGroup} from './balun-with-server.js';
 import {getDebounce} from './debounce.js';
 import {getResetInputValue} from './form-work.js';
+import {imageInBlock, blockForAvatar} from './load-photo.js';
 //создаем фрагмент документа и ищем селектор поля адреса
 const address = document.querySelector('#address');
 const mapFilters = document.querySelector('.map__filters');
@@ -23,6 +25,8 @@ const getResetInputFilter = () => {
   guestOnMap.value = 'any';
   housingPrice.value = 'any';
   map.removeLayer(markerGroup);
+  imageInBlock.scr = '';
+  blockForAvatar.src = '';
   for(let i = 0; i <= checkbox.length - 1; i++) {
     checkbox[i].checked = false;
   }
@@ -35,9 +39,9 @@ const getMap = () => {
     .on('load', () => {
     })
     .setView({
-      lat: 35.681729,
-      lng: 139.753927,
-    }, 10);
+      lat: MARKER_LAN_LNG[0],
+      lng: MARKER_LAN_LNG[1],
+    }, MAP_SIZE);
   L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -47,21 +51,21 @@ const getMap = () => {
   //делаем тип иконки
   const mainPinIcon = L.icon({
     iconUrl: 'img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
+    iconSize: ICON_SIZE_MARKER,
+    iconAnchor: ICON_ANCHOR_MARKER,
   });
   //выставляем адрес центральной иконки
   mainPinMarker = L.marker(
     {
-      lat: 35.681729, //даем иконке адрес при загрузке страницы
-      lng: 139.753927,
+      lat: MARKER_LAN_LNG[0], //даем иконке адрес при загрузке страницы
+      lng: MARKER_LAN_LNG[1],
     },
     {draggable: true, //говорим что можем ее двигать
       icon: mainPinIcon, //добавляем тип иконки
     },
   );
   mainPinMarker.addTo(map);
-  address.value = '35.681729, 139.753927';
+  address.value = `${MARKER_LAN_LNG[0]}, ${MARKER_LAN_LNG[1]}`;
   //Запись в поле адреса у кексобукинга координат центральной метки
   mainPinMarker.on('moveend', (evt) => {
     address.value = `${Math.round((evt.target.getLatLng().lat)*100000)/100000}, ${Math.round((evt.target.getLatLng().lng)*100000)/100000}`;
@@ -101,9 +105,9 @@ const getMap = () => {
         const getOfferPrice = (price) => {
           if (housingPrice.value !== 'any') {
             switch (housingPrice.value) {
-              case 'middle': return price >= 10000 && price <= 50000;
-              case 'low': return price < 10000;
-              case 'high': return price > 50000;
+              case 'middle': return price >= OFFER_PRICE.lowPrice && price <= OFFER_PRICE.highPrice;
+              case 'low': return price < OFFER_PRICE.lowPrice;
+              case 'high': return price > OFFER_PRICE.highPrice;
             }
           }
         };
